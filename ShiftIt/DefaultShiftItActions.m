@@ -20,13 +20,21 @@
 #import "DefaultShiftItActions.h"
 #import "FMTDefines.h"
 
+float stops[] = {2/3.0, 1/2.0, 1/3.0};
+int lastLeftAction = 0;
+int lastRightAction = 0;
+int lastUpAction = 0;
+int lastDownAction = 0;
+
 NSRect ShiftIt_Left(NSSize screenSize, NSRect windowRect) {
 	NSRect r;
 	
+	r.size.width = screenSize.width * stops[lastLeftAction];
 	r.origin.x = 0;
-	r.origin.y = 0;
+	lastLeftAction = (lastLeftAction + 1) % 3;
+	lastUpAction = lastDownAction = lastRightAction = 0;
 	
-	r.size.width = screenSize.width / 2;
+	r.origin.y = 0;
 	r.size.height = screenSize.height;
 	
 	return r;
@@ -35,10 +43,12 @@ NSRect ShiftIt_Left(NSSize screenSize, NSRect windowRect) {
 NSRect ShiftIt_Right(NSSize screenSize, NSRect windowRect) {
 	NSRect r;
 	
-	r.origin.x = screenSize.width/2;
-	r.origin.y = 0;
+	r.size.width = screenSize.width * stops[lastRightAction];
+	r.origin.x = screenSize.width - r.size.width;
+	lastRightAction = (lastRightAction + 1) % 3;
+	lastUpAction = lastDownAction = lastLeftAction = 0;
 	
-	r.size.width = screenSize.width / 2;
+	r.origin.y = 0;	
 	r.size.height = screenSize.height;
 
 	return r;
@@ -47,11 +57,14 @@ NSRect ShiftIt_Right(NSSize screenSize, NSRect windowRect) {
 NSRect ShiftIt_Top(NSSize screenSize, NSRect windowRect) {
 	NSRect r;
 	
-	r.origin.x = 0;
-	r.origin.y = 0;
-	
+	r.origin.x = 0;	
 	r.size.width = screenSize.width;
-	r.size.height = screenSize.height / 2;
+	
+	r.size.height = screenSize.height * stops[lastUpAction];
+	r.origin.y = 0;
+	lastUpAction = (lastUpAction + 1) % 3;
+	lastRightAction = lastDownAction = lastLeftAction = 0;
+	
 	
 	return r;
 }
@@ -60,10 +73,12 @@ NSRect ShiftIt_Bottom(NSSize screenSize, NSRect windowRect) {
 	NSRect r;
 	
 	r.origin.x = 0;
-	r.origin.y = screenSize.height / 2;
-	
 	r.size.width = screenSize.width;
-	r.size.height = screenSize.height / 2;
+	
+	r.size.height = screenSize.height * stops[lastDownAction];
+	r.origin.y = screenSize.height - r.size.height;
+	lastDownAction = (lastDownAction + 1) % 3;
+	lastRightAction = lastUpAction = lastLeftAction = 0;
 	
 	return r;
 }
@@ -77,6 +92,8 @@ NSRect ShiftIt_TopLeft(NSSize screenSize, NSRect windowRect) {
 	r.size.width = screenSize.width / 2;
 	r.size.height = screenSize.height / 2;
 	
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
 
@@ -88,7 +105,9 @@ NSRect ShiftIt_TopRight(NSSize screenSize, NSRect windowRect) {
 	
 	r.size.width = screenSize.width / 2;
 	r.size.height = screenSize.height / 2;
-	
+
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
 
@@ -100,7 +119,9 @@ NSRect ShiftIt_BottomLeft(NSSize screenSize, NSRect windowRect) {
 	
 	r.size.width = screenSize.width / 2;
 	r.size.height = screenSize.height / 2;
-	
+
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
 
@@ -113,6 +134,8 @@ NSRect ShiftIt_BottomRight(NSSize screenSize, NSRect windowRect) {
 	r.size.width = screenSize.width / 2;
 	r.size.height = screenSize.height / 2;
 	
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
 
@@ -125,6 +148,8 @@ NSRect ShiftIt_FullScreen(NSSize screenSize, NSRect windowRect) {
 	r.size.width = screenSize.width;
 	r.size.height = screenSize.height;
 	
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
 
@@ -136,5 +161,7 @@ NSRect ShiftIt_Center(NSSize screenSize, NSRect windowRect) {
 	
 	r.size = windowRect.size;
 	
+	lastUpAction = lastDownAction = lastRightAction = lastLeftAction = 0;
+
 	return r;
 }
